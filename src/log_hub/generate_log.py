@@ -21,7 +21,7 @@ def main():
         for line in in_file:
             with open(out_path, 'w') as out_file:
                 out_file.write(line)
-                time.sleep(0.001)
+                time.sleep(1)
 
 if __name__ == '__main__':
     main()
