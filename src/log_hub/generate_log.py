@@ -20,6 +20,7 @@ def main():
     with open(in_path, 'r') as in_file:
         for line in in_file:
             with open(out_path, 'w') as out_file:
+                line = line.replace(' ', '\t')
                 out_file.write(line)
                 time.sleep(1)
 

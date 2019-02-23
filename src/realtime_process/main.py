@@ -22,10 +22,13 @@ def main():
 
     kvs = KafkaUtils.createStream(ssc, zkQuorum, "spark-streaming-consumer", {topic: 1})
     lines = kvs.map(lambda x: x[1])
-    print lines.collect()
+    counts = lines.flatMap(lambda line: line.split('\t')) \
+        .map(lambda word: (word, 1)) \
+        .reduceByKey(lambda a, b: a+b)
+    counts.pprint()
 
     ssc.start()
     ssc.awaitTermination()
 
-if __name__ = '__main__':
+if __name__ == '__main__':
     main()
