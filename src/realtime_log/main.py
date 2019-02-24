@@ -7,13 +7,14 @@
 
 import sys
 import hashlib
+import happybase
 from pyspark import SparkContext
 from pyspark.streaming import StreamingContext
 from pyspark.streaming.kafka import KafkaUtils
 
 HBASE_INFO = {
     'host': 'header',
-    'port': 9099
+    'port': 9090
 }
 
 def parse(row):
@@ -36,8 +37,8 @@ def process(rdd):
     rdd = rdd.map(lambda row: row.replace('[', '')).map(lambda row: row.replace(']', ''))
     rows = rdd.collect()
     with happybase.ConnectionPool(
-            host=settings.HBASE_INFO['host'],
-            port=settings.HBASE_INFO['port'],
+            host=HBASE_INFO['host'],
+            port=HBASE_INFO['port'],
             size=3).connection() as connection:
             table = connection.table('test1')
             with table.batch() as bat:
@@ -46,11 +47,11 @@ def process(rdd):
                    row_key = hashlib.md5('{0}{1}'.format(items[0], items[1])).hexdigest()
                    bat.put(row=row_key, data={
                        'cf:create_time': items[0],
-                       'cf:user_id': item[1],
-                       'cf:keyword': item[2],
-                       'cf:rank': item[3],
-                       'cf:click_sort': item[4],
-                       'cf:url': item[5]
+                       'cf:user_id': items[1],
+                       'cf:keyword': items[2],
+                       'cf:rank': items[3],
+                       'cf:click_sort': items[4],
+                       'cf:url': items[5]
                    })
 
 
