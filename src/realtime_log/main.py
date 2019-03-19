@@ -17,18 +17,19 @@ HBASE_INFO = {
     'port': 9090
 }
 
+
 def parse(row):
     row = row.encode('utf-8')
     row.replace('[', '')
     row.replace(']', '')
     data = row.split('\t')
     print u'create_time: {create_time} user_id: {user_id} keyword: {keyword} rank: {rank} click_sort: {click_sort} url: {url} '.format(
-        create_time = data[0],
-        user_id = data[1],
-        keyword = data[2],
-        rank = data[3],
-        click_sort = data[4],
-        url = data[5]
+        create_time=data[0],
+        user_id=data[1],
+        keyword=data[2],
+        rank=data[3],
+        click_sort=data[4],
+        url=data[5]
     )
 
 
@@ -69,6 +70,7 @@ def main():
 
     ssc.start()
     ssc.awaitTermination()
+
 
 if __name__ == '__main__':
     main()
